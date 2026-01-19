@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESLA AI SQUAD | SHANGHAI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=Rajdhani:wght@400;600;800&family=Orbitron:wght@700;900&family=Exo+2:wght@400;600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* ========== 全局重置 - 使用版本2的鲜艳配色方案 ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #000; 
+            color: #fff; 
+            font-family: 'Rajdhani', 'Noto Sans SC', sans-serif;
+            overflow: hidden; 
+            height: 100vh; 
+        }
+
+        /* ========== 强化霓虹辉光 (版本2的鲜艳配色) ========== */
+        .glow-cyan { color: #0ff; text-shadow: 0 0 15px #0ff, 0 0 30px rgba(0,255,255,0.5); }
+        .glow-magenta { color: #f0f; text-shadow: 0 0 15px #f0f, 0 0 30px rgba(255,0,255,0.5); }
+        .glow-red { color: #ff003c; text-shadow: 0 0 15px #ff003c, 0 0 30px rgba(255,0,60,0.5); }
+        .glow-white { color: #fff; text-shadow: 0 0 12px rgba(255,255,255,0.6); }
+        .purple-glow { color: #f0f; text-shadow: 0 0 15px rgba(255,0,255,0.8), 0 2px 8px rgba(0,0,0,0.9); }
+
+        /* ========== 1. 开场动画 (版本1的简洁结构) ========== */
+        .boot-screen { 
+            position: fixed; 
+            inset: 0; 
+            background: #000; 
+            z-index: 10000; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            transition: 0.8s cubic-bezier(0.7, 0, 0.3, 1); 
+        }
+        .boot-screen.hidden { 
+            opacity: 0; 
+            transform: scale(1.1); 
+            pointer-events: none; 
+        }
+        
+        .matrix-rain { 
+            position: absolute; 
+            inset: 0; 
+            opacity: 0.3; 
+        }
+        .matrix-column { 
+            position: absolute; 
+            top: -100%; 
+            font-family: 'Share Tech Mono'; 
+            font-size: 18px; 
+            color: #0f0; 
+            text-shadow: 0 0 8px #0f0; 
+            animation: matrixFall linear infinite; 
+        }
+        @keyframes matrixFall { 
+            0% { 
+                top: -100%; 
+                text-shadow: 0 0 8px #0f0; 
+            } 
+            50% { 
+                text-shadow: 0 0 15px #0ff; 
+                color: #0ff; 
+            } 
+            100% { 
+                top: 100%; 
+                text-shadow: 0 0 8px #0f0; 
+            } 
+        }
+
+        .boot-terminal { 
+            position: relative; 
+            width: 90%; 
+            max-width: 800px; 
+            background: linear-gradient(135deg, rgba(0,20,40,0.95), rgba(20,0,40,0.95)); 
+            border: 2px solid #0ff; 
+            padding: 40px; 
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 70px rgba(0,255,255,0.5), 0 0 140px rgba(255,0,255,0.3), inset 0 0 50px rgba(0,255,255,0.1), 0 20px 40px rgba(0,0,0,0.8);
+        }
+
+        /* ========== 2. 背景视觉增强 (使用版本2的鲜艳配色) ========== */
+        .bg-video-mock {
+            position: fixed; 
+            inset: -5%; 
+            width: 110%; 
+            height: 110%;
+            background: #000 center/cover;
+            filter: brightness(0.5) contrast(1.4) saturate(1.1);
+            z-index: 0;
+            animation: moveBg 20s infinite alternate linear;
+        }
+        @keyframes moveBg { 
+            from { transform: scale(1.05); } 
+            to { transform: scale(1.15) translate(-1%, -1%); } 
+        }
+
+        .neon-gradient-overlay {
+            position: fixed; 
+            inset: 0;
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(255, 0, 255, 0.15), transparent 40%),
+                radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.15), transparent 40%);
+            z-index: 1;
+        }
+
+        .scan-line {
+            position: fixed; 
+            width: 100%; 
+            height: 5px; 
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(0,255,255,0) 8%, 
+                rgba(0,255,255,1) 25%, 
+                rgba(255,0,255,1) 50%, 
+                rgba(0,255,255,1) 75%, 
+                rgba(0,255,255,0) 92%, 
+                transparent 100%); 
+            box-shadow: 0 0 30px rgba(0,255,255,0.9), 0 0 60px rgba(255,0,255,0.7); 
+            animation: scanMove 5s ease-in-out infinite; 
+            z-index: 6; 
+            mix-blend-mode: screen; 
+        } 
+        @keyframes scanMove { 
+            0% { top: -6%; opacity: 0; } 
+            4% { opacity: 1; } 
+            96% { opacity: 1; } 
+            100% { top: 106%; opacity: 0; } 
+        }
+
+        /* ========== 3. 主布局 ========== */
+        .container {
+            position: relative; 
+            z-index: 10; 
+            height: 100vh;
+            display: grid; 
+            grid-template-columns: 1fr 400px; 
+            grid-template-rows: auto 1fr auto;
+            padding: 3rem 5rem; 
+            max-width: 1800px; 
+            margin: 0 auto;
+        }
+
+        .header { 
+            grid-column: 1 / -1; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 2rem;
+        }
+        
+        .logo-text { 
+            font-family: 'Noto Sans SC'; 
+            font-weight: 900; 
+            font-size: 28px; 
+            letter-spacing: 2px; 
+            color: #fff; 
+            text-shadow: 0 0 15px rgba(255,255,255,0.6); 
+        }
+        
+        .status-badge { 
+            background: rgba(0,255,255,0.1); 
+            border: 1px solid #0ff; 
+            padding: 8px 24px; 
+            font-size: 12px; 
+            letter-spacing: 5px; 
+            color: #0ff; 
+            text-shadow: 0 0 15px #0ff; 
+            backdrop-filter: blur(15px); 
+            font-weight: 700; 
+            animation: badgePulse 2s ease-in-out infinite; 
+            font-family: 'Exo 2';
+        } 
+        
+        @keyframes badgePulse { 
+            0%, 100% { box-shadow: 0 0 15px rgba(0,255,255,0.4); } 
+            50% { box-shadow: 0 0 30px #0ff; } 
+        }
+
+        .hero { 
+            grid-column: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            padding-top: 5vh; 
+        }
+        
+        .pretitle { 
+            font-family: 'Orbitron'; 
+            font-size: 14px; 
+            color: #0ff; 
+            text-shadow: 0 0 15px #0ff; 
+            letter-spacing: 10px; 
+            margin-bottom: 30px; 
+            font-weight: 700;
+        }
+
+        /* 核心标题：使用版本2的鲜艳效果 */
+        .main-title { 
+            font-family: 'Noto Sans SC'; 
+            font-size: 100px; 
+            font-weight: 900; 
+            line-height: 1.1; 
+            margin-bottom: 40px; 
+        }
+        
+        .title-line {
+            display: block;
+            margin-bottom: 15px;
+        }
+        
+        .static-text { 
+            color: #fff; 
+            text-shadow: 0 0 20px rgba(255,255,255,0.4); 
+            display: inline-block; 
+        }
+        
+        .tear-text {
+            display: inline-block; 
+            background: linear-gradient(to bottom, #fff 0%, #fff 40%, #0ff 100%); 
+            -webkit-background-clip: text; 
+            background-clip: text;
+            -webkit-text-fill-color: transparent; 
+            color: transparent;
+            filter: drop-shadow(0 0 25px rgba(0,255,255,0.8)); 
+            animation: tear 3s infinite; 
+        }
+        
+        @keyframes tear { 
+            0%, 100% { transform: translate(0, 0); } 
+            5% { transform: translate(-8px, 0); filter: drop-shadow(-12px 0 #f0f) drop-shadow(12px 0 #0ff); } 
+            6% { transform: translate(8px, 0); } 
+            7% { transform: translate(0, 0); } 
+        }
+
+        .subtitle { 
+            font-size: 24px; 
+            color: #f0f; 
+            text-shadow: 0 0 15px #f0f; 
+            font-weight: 600; 
+            margin-top: 15px; 
+            font-family: 'Orbitron';
+            letter-spacing: 2px;
+        }
+
+        /* 正文区 */
+        .info-section { 
+            margin-top: 60px; 
+            border-left: 4px solid #0ff; 
+            padding-left: 30px; 
+            max-width: 700px; 
+            position: relative;
+        }
+        
+        .info-label { 
+            font-family: 'Exo 2'; 
+            color: #0ff; 
+            text-shadow: 0 0 10px #0ff; 
+            font-size: 14px; 
+            font-weight: 800; 
+            letter-spacing: 4px; 
+            margin-bottom: 10px; 
+        }
+        
+        .info-text { 
+            font-size: 20px; 
+            line-height: 1.6; 
+            color: #fff; 
+            text-shadow: 0 2px 10px rgba(0,0,0,1);
+        }
+        
+        .hl { 
+            color: #f0f; 
+            text-shadow: 0 0 15px #f0f; 
+            font-weight: 800; 
+        }
+
+        /* ========== HUD 侧边栏 (版本2样式) ========== */
+        .hud-panel { 
+            grid-column: 2; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            gap: 35px; 
+            padding-left: 3rem; 
+            position: relative; 
+        }
+        
+        .hud-panel::before { 
+            content: ''; 
+            position: absolute; 
+            left: 0; 
+            top: 10%; 
+            height: 80%; 
+            width: 2px; 
+            background: linear-gradient(to bottom, transparent, #0ff 20%, #f0f 80%, transparent); 
+            box-shadow: 0 0 15px #0ff; 
+        }
+        
+        .hud-item { 
+            position: relative; 
+            font-family: 'Share Tech Mono', monospace; 
+            padding-left: 30px; 
+            margin-bottom: 8px; 
+        }
+        
+        .hud-item::before { 
+            content: ''; 
+            position: absolute; 
+            left: -2px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            width: 8px; 
+            height: 8px; 
+            background: #0ff; 
+            box-shadow: 0 0 15px #0ff; 
+            border-radius: 50%; 
+        }
+        
+        .hud-item:nth-child(even)::before { 
+            background: #f0f; 
+            box-shadow: 0 0 15px #f0f; 
+        }
+        
+        .hud-label { 
+            font-size: 14px; 
+            color: rgba(255,255,255,0.7); 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            margin-bottom: 5px; 
+            font-weight: 700; 
+            font-family: 'Exo 2', sans-serif; 
+        }
+        
+        .hud-value { 
+            font-size: 32px; 
+            color: #0ff; 
+            text-shadow: 0 0 25px #0ff; 
+            font-weight: 700; 
+            font-family: 'Orbitron', sans-serif; 
+            letter-spacing: 2px; 
+            line-height: 1; 
+            margin-bottom: 3px; 
+            transform: skewX(-5deg); 
+        }
+        
+        .hud-item:nth-child(even) .hud-value { 
+            color: #f0f; 
+            text-shadow: 0 0 25px #f0f; 
+        }
+        
+        .hud-desc { 
+            font-size: 13px; 
+            color: #fff; 
+            text-shadow: 0 0 5px rgba(0,0,0,0.5); 
+            line-height: 1.4; 
+            opacity: 1; 
+        }
+
+        /* 底部 CTA */
+        .footer { 
+            grid-column: 1 / -1; 
+            display: flex; 
+            justify-content: center; 
+            padding: 30px 0; 
+        }
+        
+        .holo-btn {
+            display: flex; 
+            align-items: center; 
+            gap: 30px; 
+            cursor: pointer;
+            transition: 0.3s; 
+            padding: 20px 40px; 
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(10px);
+        }
+        
+        .holo-btn:hover { 
+            border-color: #0ff; 
+            background: rgba(0, 255, 255, 0.1); 
+            box-shadow: 0 0 20px rgba(0,255,255,0.4);
+            transform: translateY(-5px); 
+        }
+        
+        .cta-main { 
+            font-size: 28px; 
+            font-weight: 900; 
+            color: #fff; 
+            text-shadow: 0 0 15px rgba(255,255,255,0.6); 
+        }
+        
+        .cta-sub { 
+            font-size: 14px; 
+            color: #0ff; 
+            text-shadow: 0 0 10px #0ff; 
+            letter-spacing: 4px; 
+            font-weight: 700;
+        }
+        
+        .qr-box { 
+            width: 100px; 
+            height: 100px; 
+            background: #fff; 
+            padding: 5px; 
+            box-shadow: 0 0 25px rgba(0,255,255,0.8); 
+            border-radius: 8px; 
+            transition: 0.3s; 
+            object-fit: cover;
+        }
+        
+        .qr-box:hover { 
+            transform: scale(1.1) rotate(3deg); 
+            box-shadow: 0 0 35px rgba(0,255,255,1);
+        }
+
+        /* ========== 图片上传面板 ========== */
+        .image-settings {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(0, 20, 40, 0.9);
+            border: 2px solid #0ff;
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0,255,255,0.5);
+            max-width: 300px;
+            display: none; /* 已隐藏图片设置窗口 */
+        }
+        
+        .image-settings h3 {
+            color: #0ff;
+            margin-bottom: 10px;
+            font-family: 'Exo 2';
+            font-size: 16px;
+            text-align: center;
+        }
+        
+        .image-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .image-preview {
+            width: 100%;
+            height: 150px;
+            border: 2px dashed #0ff;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+        
+        .image-preview span {
+            color: #0ff;
+            font-size: 14px;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-label {
+            background: rgba(0,255,255,0.1);
+            border: 1px solid #0ff;
+            color: #0ff;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            font-family: 'Exo 2';
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .file-label:hover {
+            background: rgba(0,255,255,0.2);
+            box-shadow: 0 0 10px rgba(0,255,255,0.5);
+        }
+        
+        .image-sliders {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .slider-group label {
+            color: #0ff;
+            font-size: 12px;
+            width: 60px;
+            font-family: 'Exo 2';
+        }
+        
+        .slider-group input {
+            flex: 1;
+            height: 5px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        .slider-value {
+            color: #fff;
+            font-size: 12px;
+            width: 40px;
+            text-align: center;
+            font-family: 'Share Tech Mono';
+        }
+
+        /* ========== 手机全屏浏览专门优化 ========== */
+        @media (max-width: 1200px) {
+            .container { 
+                padding: 2rem; 
+                grid-template-columns: 1fr; 
+                grid-template-rows: auto auto 1fr auto;
+            }
+            
+            .hud-panel { 
+                grid-column: 1; 
+                grid-row: 3; 
+                display: flex; 
+                flex-direction: row; 
+                flex-wrap: wrap; 
+                justify-content: space-between; 
+                gap: 20px; 
+                padding-left: 0; 
+                margin-top: 40px;
+                margin-bottom: 40px;
+            }
+            
+            .hud-panel::before { 
+                display: none; 
+            }
+            
+            .hud-item { 
+                flex: 1 1 45%; 
+                min-width: 200px; 
+                padding-left: 20px; 
+                margin-bottom: 20px; 
+            }
+            
+            .hud-item::before { 
+                left: 0; 
+            }
+            
+            .main-title { 
+                font-size: clamp(40px, 10vw, 70px); 
+                line-height: 1.2; 
+                margin-bottom: 30px; 
+            }
+            
+            .hero { 
+                padding-top: 2vh; 
+            }
+            
+            .pretitle { 
+                font-size: 12px; 
+                letter-spacing: 8px; 
+                margin-bottom: 25px; 
+            }
+            
+            .subtitle { 
+                font-size: 18px; 
+                margin-top: 10px; 
+            }
+            
+            .info-section { 
+                margin-top: 40px; 
+                max-width: 100%; 
+            }
+            
+            .info-text { 
+                font-size: 18px; 
+            }
+            
+            .hud-value {
+                font-size: 28px;
+            }
+            
+            .image-settings {
+                bottom: 10px;
+                right: 10px;
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container { 
+                padding: 1.5rem; 
+                grid-template-rows: auto auto auto auto;
+            }
+            
+            .header { 
+                flex-direction: column; 
+                align-items: flex-start; 
+                gap: 15px; 
+                margin-bottom: 1.5rem; 
+            }
+            
+            .logo-text { 
+                font-size: 22px; 
+            }
+            
+            .status-badge { 
+                padding: 6px 20px; 
+                font-size: 11px; 
+                letter-spacing: 4px; 
+                align-self: flex-start; 
+            }
+            
+            .main-title { 
+                font-size: clamp(36px, 8vw, 50px); 
+                margin-bottom: 25px; 
+            }
+            
+            .pretitle { 
+                font-size: 11px; 
+                letter-spacing: 6px; 
+                margin-bottom: 20px; 
+            }
+            
+            .tear-text { 
+                font-size: clamp(36px, 8vw, 50px); 
+            }
+            
+            .subtitle { 
+                font-size: 16px; 
+            }
+            
+            .info-section { 
+                padding-left: 20px; 
+                margin-top: 30px; 
+            }
+            
+            .info-label { 
+                font-size: 13px; 
+            }
+            
+            .info-text { 
+                font-size: 17px; 
+                line-height: 1.5; 
+            }
+            
+            .hud-panel { 
+                flex-direction: column; 
+                gap: 25px; 
+                margin-top: 30px; 
+                margin-bottom: 30px; 
+            }
+            
+            .hud-item { 
+                flex: 1 1 100%; 
+                padding-left: 25px; 
+            }
+            
+            .hud-value { 
+                font-size: 28px; 
+            }
+            
+            .footer { 
+                padding: 20px 0; 
+            }
+            
+            .holo-btn { 
+                flex-direction: column; 
+                gap: 20px; 
+                padding: 15px 25px; 
+                text-align: center; 
+            }
+            
+            .qr-box { 
+                width: 80px; 
+                height: 80px; 
+            }
+            
+            .cta-main { 
+                font-size: 24px; 
+            }
+            
+            .cta-sub { 
+                font-size: 13px; 
+            }
+            
+            .image-settings {
+                position: relative;
+                bottom: auto;
+                right: auto;
+                margin: 20px auto;
+                width: 90%;
+                max-width: 400px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container { 
+                padding: 1rem; 
+            }
+            
+            .main-title { 
+                font-size: clamp(32px, 7vw, 40px); 
+            }
+            
+            .tear-text { 
+                font-size: clamp(32px, 7vw, 40px); 
+            }
+            
+            .pretitle { 
+                font-size: 10px; 
+                letter-spacing: 5px; 
+            }
+            
+            .subtitle { 
+                font-size: 14px; 
+            }
+            
+            .info-text { 
+                font-size: 16px; 
+            }
+            
+            .hud-value { 
+                font-size: 24px; 
+            }
+            
+            .cta-main { 
+                font-size: 22px; 
+            }
+            
+            .boot-terminal { 
+                padding: 30px; 
+            }
+            
+            .boot-terminal h2 { 
+                font-size: 20px; 
+            }
+        }
+
+        /* 横屏手机优化 */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .container { 
+                padding: 1rem; 
+                grid-template-rows: auto auto 1fr auto;
+            }
+            
+            .hero { 
+                padding-top: 0; 
+            }
+            
+            .main-title { 
+                font-size: clamp(30px, 5vw, 40px); 
+                margin-bottom: 20px; 
+            }
+            
+            .pretitle { 
+                margin-bottom: 15px; 
+            }
+            
+            .info-section { 
+                margin-top: 20px; 
+            }
+            
+            .hud-panel { 
+                margin-top: 20px; 
+                margin-bottom: 20px; 
+            }
+            
+            .footer { 
+                padding: 15px 0; 
+            }
+        }
+
+        /* 超小屏幕优化 */
+        @media (max-width: 360px) {
+            .logo-text { 
+                font-size: 18px; 
+            }
+            
+            .status-badge { 
+                padding: 5px 15px; 
+                font-size: 10px; 
+                letter-spacing: 3px; 
+            }
+            
+            .main-title { 
+                font-size: 28px; 
+            }
+            
+            .tear-text { 
+                font-size: 28px; 
+            }
+            
+            .info-text { 
+                font-size: 15px; 
+            }
+            
+            .hud-value { 
+                font-size: 22px; 
+            }
+            
+            .cta-main { 
+                font-size: 20px; 
+            }
+            
+            .qr-box { 
+                width: 70px; 
+                height: 70px; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 开场动画 (英文版) -->
+    <div class="boot-screen" id="bootScreen">
+        <div class="matrix-rain" id="matrixRain"></div>
+        <div class="boot-terminal">
+            <h2 class="glow-cyan" style="font-family: 'Orbitron'; margin-bottom: 20px; font-size: 24px;">SYSTEM STARTUP...</h2>
+            <div id="bootLogs"></div>
+            <div id="repairBar" style="margin-top: 30px; display: none;">
+                <div style="height: 2px; width: 100%; background: rgba(0,255,255,0.1); position: relative; overflow: hidden;">
+                    <div id="progressFill" style="position: absolute; height: 100%; width: 0%; background: linear-gradient(90deg, #0ff, #f0f); box-shadow: 0 0 15px #0ff;"></div>
+                </div>
+                <p id="progressVal" style="text-align: right; font-family: 'Share Tech Mono'; color: #0ff; margin-top: 10px; font-size: 14px;">0%</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主页面 -->
+    <div class="main-content">
+        <!-- 背景图片容器 -->
+        <div class="bg-video-mock" id="backgroundImage"></div>
+        <div class="neon-gradient-overlay"></div>
+        <div class="scan-line"></div>
+
+        <div class="container">
+            <header class="header">
+                <div class="logo-text">TESLA SHANGHAI <span style="color:#0ff; font-weight: 300;">DELIVERY</span></div>
+                <div class="status-badge">RECRUITING NOW</div>
+            </header>
+
+            <main class="hero">
+                <div class="pretitle">INTERNAL RECRUITMENT</div>
+                <h1 class="main-title">
+                    <span class="title-line">
+                        <span class="static-text">别做工具人</span>
+                    </span>
+                    <span class="title-line tear-text">来做驾驭AI的人</span>
+                    <span class="subtitle">—— AI 效能特战队招募ing</span>
+                </h1>
+
+                <div class="info-section">
+                    <p class="info-label">// MISSION OBJECTIVE</p>
+                    <p class="info-text">
+                        摆脱机械重复，在交付战场铸就 <span class="hl">AI数字僚机</span><br>
+                        让AI瞬间解析复杂政策，一键化解极限客诉<br>
+                        你只需负责<span class="hl">决策与跨越</span>
+                    </p>
+                </div>
+            </main>
+
+            <!-- HUD 侧边栏 (版本2样式) -->
+            <aside class="hud-panel">
+                <div class="hud-item">
+                    <div class="hud-label">REQUIREMENT</div>
+                    <div class="hud-value">业务导向</div>
+                    <div class="hud-desc">熟悉交付，充满创意与行动力</div>
+                </div>
+                <div class="hud-item">
+                    <div class="hud-label">PAIN POINTS</div>
+                    <div class="hud-value">AI 解痛</div>
+                    <div class="hud-desc">SOP、政策、客诉，AI 毫秒级生成</div>
+                </div>
+                <div class="hud-item">
+                    <div class="hud-label">BENEFITS</div>
+                    <div class="hud-value">技能升级</div>
+                    <div class="hud-desc">深度 Prompt 培训，职业竞争力飞跃</div>
+                </div>
+                <div class="hud-item">
+                    <div class="hud-label">MISSION</div>
+                    <div class="hud-value">效能解放</div>
+                    <div class="hud-desc">摆脱琐碎，成就高价值交付专家</div>
+                </div>
+            </aside>
+
+            <footer class="footer">
+                <div class="holo-btn" onclick="joinSquad()">
+                    <div class="cta-info">
+                        <div class="cta-main">立即加入</div>
+                        <div class="cta-sub">扫描二维码加入精英团队</div>
+                    </div>
+                    <!-- QR码图片预留框 - 已替换为本地文件 background.jpg -->
+                    <img class="qr-box" id="qrCodeImage" src="background.jpg" alt="扫码加入">
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- 图片设置面板（已隐藏） -->
+    <div class="image-settings">
+        <h3>图片设置</h3>
+        <div class="image-controls">
+            <div class="image-preview" id="imagePreview">
+                <span>背景图片预览</span>
+            </div>
+            
+            <!-- 背景图片上传 -->
+            <input type="file" id="backgroundUpload" class="file-input" accept="image/*">
+            <label for="backgroundUpload" class="file-label">上传背景图片</label>
+            
+            <!-- QR码图片上传 -->
+            <input type="file" id="qrUpload" class="file-input" accept="image/*">
+            <label for="qrUpload" class="file-label">上传二维码图片</label>
+            
+            <div class="image-sliders">
+                <div class="slider-group">
+                    <label>亮度</label>
+                    <input type="range" id="brightnessSlider" min="0" max="200" value="50" step="1">
+                    <span class="slider-value" id="brightnessValue">50%</span>
+                </div>
+                <div class="slider-group">
+                    <label>对比度</label>
+                    <input type="range" id="contrastSlider" min="0" max="300" value="140" step="1">
+                    <span class="slider-value" id="contrastValue">140%</span>
+                </div>
+                <div class="slider-group">
+                    <label>饱和度</label>
+                    <input type="range" id="saturationSlider" min="0" max="300" value="110" step="1">
+                    <span class="slider-value" id="saturationValue">110%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 矩阵背景
+        const rain = document.getElementById('matrixRain');
+        const chars = '01ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        
+        // 根据屏幕尺寸调整矩阵雨密度
+        const isMobile = window.innerWidth < 768;
+        const columnCount = isMobile ? 15 : 25;
+        
+        for(let i = 0; i < columnCount; i++) {
+            const col = document.createElement('div');
+            col.className = 'matrix-column';
+            col.style.left = Math.random() * 100 + '%';
+            col.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            col.style.animationDelay = Math.random() * 2 + 's';
+            
+            let text = '';
+            const lineCount = isMobile ? 8 : 15;
+            for(let j = 0; j < lineCount; j++) { 
+                text += chars[Math.floor(Math.random() * chars.length)] + '<br>'; 
+            }
+            col.innerHTML = text;
+            rain.appendChild(col);
+        }
+
+        // 启动逻辑
+        const logs = document.getElementById('bootLogs');
+        const messages = [
+            "> INITIALIZING NEURAL LINK...",
+            "> BYPASSING SOP LIMITATIONS...",
+            "> CORES ONLINE: 100%",
+            "> READY FOR DEPLOYMENT."
+        ];
+
+        let msgIdx = 0;
+        const logInterval = setInterval(() => {
+            if(msgIdx < messages.length) {
+                const p = document.createElement('p');
+                p.style.fontFamily = 'Share Tech Mono';
+                p.style.color = '#fff';
+                p.style.textShadow = '0 0 5px #fff';
+                p.style.marginBottom = '8px';
+                p.style.fontSize = '14px';
+                p.style.lineHeight = '1.5';
+                p.innerText = messages[msgIdx];
+                logs.appendChild(p);
+                msgIdx++;
+            } else {
+                clearInterval(logInterval);
+                document.getElementById('repairBar').style.display = 'block';
+                runProgress();
+            }
+        }, 400);
+
+        function runProgress() {
+            let p = 0;
+            const fill = document.getElementById('progressFill');
+            const val = document.getElementById('progressVal');
+            const int = setInterval(() => {
+                p += 2;
+                fill.style.width = p + '%';
+                val.innerText = p + '%';
+                
+                if(p >= 100) {
+                    clearInterval(int);
+                    setTimeout(() => {
+                        document.getElementById('bootScreen').classList.add('hidden');
+                    }, 500);
+                }
+            }, 30);
+        }
+
+        // 加入功能
+        function joinSquad() {
+            alert('🚀 欢迎加入特斯拉AI特战队！\n\n扫描二维码获取更多信息，\n让我们一起定义交付的未来。');
+            
+            // 添加视觉反馈
+            const statusBadge = document.querySelector('.status-badge');
+            const originalText = statusBadge.textContent;
+            statusBadge.textContent = "WELCOME!";
+            statusBadge.style.animation = 'none';
+            statusBadge.style.boxShadow = '0 0 30px #0ff';
+            
+            setTimeout(() => {
+                statusBadge.textContent = originalText;
+                statusBadge.style.animation = 'badgePulse 2s ease-in-out infinite';
+            }, 2000);
+        }
+
+        // 图片上传功能（保留但由于面板隐藏，不会触发）
+        document.addEventListener('DOMContentLoaded', function() {
+            const backgroundImage = document.getElementById('backgroundImage');
+            const imagePreview = document.getElementById('imagePreview');
+            const backgroundUpload = document.getElementById('backgroundUpload');
+            const qrUpload = document.getElementById('qrUpload');
+            const qrCodeImage = document.getElementById('qrCodeImage');
+            
+            const brightnessSlider = document.getElementById('brightnessSlider');
+            const contrastSlider = document.getElementById('contrastSlider');
+            const saturationSlider = document.getElementById('saturationSlider');
+            
+            const brightnessValue = document.getElementById('brightnessValue');
+            const contrastValue = document.getElementById('contrastValue');
+            const saturationValue = document.getElementById('saturationValue');
+            
+            // 默认背景图片（如果没有上传）
+            const defaultBackground = 'https://digitalassets.tesla.com/tesla-contents/image/upload/f_auto,q_auto/Cybertruck-Hero-Desktop-Dynamic-Asset-Region-West.png';
+            
+            // 设置默认背景
+            backgroundImage.style.backgroundImage = `url('${defaultBackground}')`;
+            
+            // 背景图片上传
+            backgroundUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const imgUrl = event.target.result;
+                        backgroundImage.style.backgroundImage = `url('${imgUrl}')`;
+                        
+                        // 更新预览
+                        imagePreview.innerHTML = '';
+                        const previewImg = document.createElement('img');
+                        previewImg.src = imgUrl;
+                        imagePreview.appendChild(previewImg);
+                        
+                        // 保存到本地存储
+                        localStorage.setItem('backgroundImage', imgUrl);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // QR码图片上传
+            qrUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const imgUrl = event.target.result;
+                        qrCodeImage.src = imgUrl;
+                        
+                        // 保存到本地存储
+                        localStorage.setItem('qrCodeImage', imgUrl);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // 从本地存储加载图片
+            function loadImagesFromStorage() {
+                const savedBackground = localStorage.getItem('backgroundImage');
+                const savedQRCode = localStorage.getItem('qrCodeImage');
+                
+                if (savedBackground) {
+                    backgroundImage.style.backgroundImage = `url('${savedBackground}')`;
+                    
+                    // 更新预览
+                    imagePreview.innerHTML = '';
+                    const previewImg = document.createElement('img');
+                    previewImg.src = savedBackground;
+                    imagePreview.appendChild(previewImg);
+                }
+                
+                if (savedQRCode) {
+                    qrCodeImage.src = savedQRCode;
+                }
+            }
+            
+            // 加载保存的图片
+            loadImagesFromStorage();
+            
+            // 图片效果滑块
+            function updateImageFilters() {
+                const brightness = brightnessSlider.value / 100;
+                const contrast = contrastSlider.value / 100;
+                const saturation = saturationSlider.value / 100;
+                
+                backgroundImage.style.filter = `brightness(${brightness}) contrast(${contrast}) saturate(${saturation})`;
+                
+                // 更新显示值
+                brightnessValue.textContent = brightnessSlider.value + '%';
+                contrastValue.textContent = contrastSlider.value + '%';
+                saturationValue.textContent = saturationSlider.value + '%';
+                
+                // 保存到本地存储
+                localStorage.setItem('imageFilters', JSON.stringify({
+                    brightness: brightnessSlider.value,
+                    contrast: contrastSlider.value,
+                    saturation: saturationSlider.value
+                }));
+            }
+            
+            // 加载保存的滤镜设置
+            const savedFilters = localStorage.getItem('imageFilters');
+            if (savedFilters) {
+                const filters = JSON.parse(savedFilters);
+                brightnessSlider.value = filters.brightness || 50;
+                contrastSlider.value = filters.contrast || 140;
+                saturationSlider.value = filters.saturation || 110;
+                updateImageFilters();
+            }
+            
+            // 监听滑块变化
+            brightnessSlider.addEventListener('input', updateImageFilters);
+            contrastSlider.addEventListener('input', updateImageFilters);
+            saturationSlider.addEventListener('input', updateImageFilters);
+            
+            // 初始更新
+            updateImageFilters();
+        });
+
+        // 添加键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            if(e.code === 'Space') {
+                e.preventDefault();
+                joinSquad();
+            }
+        });
+
+        // 检测屏幕旋转
+        function handleOrientationChange() {
+            if (window.innerHeight > window.innerWidth) {
+                // 竖屏
+                document.body.style.height = '100vh';
+            } else {
+                // 横屏
+                document.body.style.height = '100%';
+            }
+        }
+        
+        // 初始检测
+        handleOrientationChange();
+        
+        // 监听屏幕旋转
+        window.addEventListener('resize', handleOrientationChange);
+        window.addEventListener('orientationchange', handleOrientationChange);
+    </script>
+</body>
+</html>
